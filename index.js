@@ -17,7 +17,7 @@ const limiter = rateLimit({
 app.use(limiter)
 app.set('trust proxy, 1')
 
-app.use('/api', require('./routes/riot'))
+app.use('/summoner', require('./routes/riot'))
 //Enable cors
 app.use(cors())
 
