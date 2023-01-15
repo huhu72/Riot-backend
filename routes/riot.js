@@ -46,7 +46,7 @@ router.get("/ranked/info", async (req, res) => {
   try {
     const apiRes = await needle(
       "get",
-      `${API_BASE_URL}${API_RANKED_URL}${summonerID}?${params}`
+      `${API_BASE_URL}${API_RANKED_URL}${this.summonerID}?${params}`
     );
     const data = apiRes.body;
     res.status(200).json(data);
