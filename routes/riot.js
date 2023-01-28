@@ -29,41 +29,53 @@ router.get("/", async (req, res) => {
 router.get("/ranked", async (req, res) => {
   this.summonerData = {};
   this.summonerId = "";
+  const data = await getPlayerData(url.parse(req.url, true).query.summoner);
+  console.log(data);
   try {
-    const requestData = url.parse(req.url, true).query.summoner;
-    console.log(requestData);
-    const apiRes = await needle(
-      "get",
-      `${API_BASE_URL}${API_SUMMONER_URL}${requestData}?${params}`
-    );
-    this.summonerData = apiRes.body;
-    this.summonerId = apiRes.body.id;
-    res.redirect(`ranked/info?summoner=${requestData}`);
+    res.status(200).json(data);
   } catch (error) {
     res.status(500).json("error: in redirect");
   }
+  // try {
+  //   const requestData = url.parse(req.url, true).query.summoner;
+  //   console.log(requestData);
+  //   const apiRes = await needle(
+  //     "get",
+  //     `${API_BASE_URL}${API_SUMMONER_URL}${requestData}?${params}`
+  //   );
+  //   this.summonerData = apiRes.body;
+  //   this.summonerId = apiRes.body.id;
+  //   //res.redirect(`ranked/info?summoner=${requestData}`);
+  // } catch (error) {
+  //   res.status(500).json("error: in redirect");
+  // }
 });
-
-router.get("/ranked/info", async (req, res) => {
-  console.log("redirected");
+async function getPlayerData(playerName) {
   try {
-    const apiRes = await needle(
+    //console.log(playerName);
+    const playerData = await needle(
       "get",
-      `${API_BASE_URL}${API_RANKED_URL}${this.summonerId}?${params}`
+      `${API_BASE_URL}${API_SUMMONER_URL}${playerName}?${params}`
     );
-    // console.log(`${API_BASE_URL}${API_RANKED_URL}${this.summonerID}?${params}`);
-    const data = apiRes.body[0] ? apiRes.body[0] : {};
-    Object.assign(data, this.summonerData);
+    //console.log(playerData.body);
+    //console.log(playerData.body);
+    const rankedData = await needle(
+      "get",
+      `${API_BASE_URL}${API_RANKED_URL}${playerData.body.id}?${params}`
+    );
+    const data = rankedData.body[0] ? rankedData.body[0] : {};
+    //console.log(data);
+    Object.assign(data, playerData.body);
     if (data.summonerId) {
       data["encriptedId"] = data.summonerId;
       delete data.summonerId;
       delete data.id;
     }
-    console.log(data);
-    res.status(200).json(data);
+    // console.log(data);
+    return data;
   } catch (error) {
-    res.status(500).json("error");
+    return { error: "500" };
   }
-});
+}
 
 module.exports = router;
