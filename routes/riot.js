@@ -63,9 +63,20 @@ async function getPlayerData(playerName) {
       "get",
       `${API_BASE_URL}${API_RANKED_URL}${playerData.body.id}?${params}`
     );
+    console.log(
+      `${API_BASE_URL}${API_RANKED_URL}${playerData.body.id}?${params}`
+    );
     const data = rankedData.body[0] ? rankedData.body[0] : {};
     //console.log(data);
     Object.assign(data, playerData.body);
+    if (data.name) {
+      data["summonerName"] = data.name;
+      if (!data.rank) {
+        data["rank"] = "NA";
+        data["tier"] = "NA";
+      }
+      delete data.name;
+    }
     if (data.summonerId) {
       data["encriptedId"] = data.summonerId;
       delete data.summonerId;
