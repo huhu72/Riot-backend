@@ -50,6 +50,7 @@ async function getPlayerData(playerName) {
 			`${API_BASE_URL}${API_RANKED_URL}${playerData.body.id}?${params}`
 		);
 		let data = {};
+		console.log(rankedData.body);
 		for (var index in rankedData.body) {
 			console.log(
 				`${rankedData.body[index].summonerName} ${
