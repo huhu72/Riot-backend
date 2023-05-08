@@ -66,11 +66,13 @@ async function getPlayerData(playerName) {
 		console.log(
 			`${API_BASE_URL}${API_RANKED_URL}${playerData.body.id}?${params}`
 		);
-		const data = rankedData.body[0]
-			? rankedData.body[0].queueType === 'RANKED_SOLO_5x5'
-				? rankedData.body[0]
-				: rankedData.body[1]
-			: {};
+		let data = {};
+		for (var index in rankedData.body) {
+			if (rankedData.body[index].queueType === 'RANKED_SOLO_5x5') {
+				data = rankedData.body[index].queueType = 'RANKED_SOLO_5x5';
+			}
+		}
+
 		console.log(`data after retriving ranked data`);
 		console.log(data);
 		Object.assign(data, playerData.body);
