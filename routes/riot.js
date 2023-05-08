@@ -30,35 +30,18 @@ router.get('/ranked', async (req, res) => {
 	this.summonerData = {};
 	this.summonerId = '';
 	const data = await getPlayerData(url.parse(req.url, true).query.summoner);
-	//console.log(data);
 	try {
 		res.status(200).json(data);
 	} catch (error) {
 		res.status(500).json('error: in redirect');
 	}
-	// try {
-	//   const requestData = url.parse(req.url, true).query.summoner;
-	//   console.log(requestData);
-	//   const apiRes = await needle(
-	//     "get",
-	//     `${API_BASE_URL}${API_SUMMONER_URL}${requestData}?${params}`
-	//   );
-	//   this.summonerData = apiRes.body;
-	//   this.summonerId = apiRes.body.id;
-	//   //res.redirect(`ranked/info?summoner=${requestData}`);
-	// } catch (error) {
-	//   res.status(500).json("error: in redirect");
-	// }
 });
 async function getPlayerData(playerName) {
 	try {
-		//console.log(playerName);
 		const playerData = await needle(
 			'get',
 			`${API_BASE_URL}${API_SUMMONER_URL}${playerName}?${params}`
 		);
-		//console.log(playerData.body);
-		//console.log(playerData.body);
 		const rankedData = await needle(
 			'get',
 			`${API_BASE_URL}${API_RANKED_URL}${playerData.body.id}?${params}`
@@ -69,13 +52,11 @@ async function getPlayerData(playerName) {
 		let data = {};
 		for (var index in rankedData.body) {
 			if (rankedData.body[index].queueType === 'RANKED_SOLO_5x5') {
-				data = rankedData.body[index].queueType = 'RANKED_SOLO_5x5';
+				data = rankedData.body[index];
 			}
 		}
-
-		console.log(`data after retriving ranked data`);
-		console.log(data);
 		Object.assign(data, playerData.body);
+		console.log(data);
 		if (data.name) {
 			data['summonerName'] = data.name;
 			if (!data.rank) {
@@ -89,7 +70,6 @@ async function getPlayerData(playerName) {
 			delete data.summonerId;
 			delete data.id;
 		}
-		// console.log(data);
 		return data;
 	} catch (error) {
 		return { error: '500' };
