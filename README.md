@@ -4,7 +4,7 @@ This is a backend server for obtaining information about League of Legends summo
 
 ## API Endpoint
 
-The API endpoint is deployed at `https://riot-backend.onrender.com`.
+The API endpoint is deployed at [https://riot-backend.onrender.com](https://riot-backend.onrender.com).
 
 ## Usage
 
