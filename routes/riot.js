@@ -75,6 +75,7 @@ async function getPlayerData(playerName) {
 			data['encriptedId'] = data.summonerId;
 			delete data.summonerId;
 			delete data.id;
+			delete data.accountId;
 		}
 		return data;
 	} catch (error) {
