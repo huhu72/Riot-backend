@@ -51,6 +51,11 @@ async function getPlayerData(playerName) {
 		);
 		let data = {};
 		for (var index in rankedData.body) {
+			console.log(
+				`${rankedData.body[index].summonerName} ${
+					rankedData.body[index].queueType === 'RANKED_SOLO_5x5'
+				}`
+			);
 			if (rankedData.body[index].queueType === 'RANKED_SOLO_5x5') {
 				data = rankedData.body[index];
 			}
