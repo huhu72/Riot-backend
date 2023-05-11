@@ -46,30 +46,37 @@ async function getPlayerData(playerName) {
 			'get',
 			`${API_BASE_URL}${API_RANKED_URL}${playerData.body.id}?${params}`
 		);
-		console.log(
-			`${API_BASE_URL}${API_RANKED_URL}${playerData.body.id}?${params}`
-		);
+		// console.log(
+		// 	`${API_BASE_URL}${API_RANKED_URL}${playerData.body.id}?${params}`
+		// );
 		let data = {};
-		console.log(rankedData.body);
+		//console.log(rankedData.body);
 		for (var index in rankedData.body) {
-			console.log(
-				`${rankedData.body[index].summonerName} ${
-					rankedData.body[index].queueType === 'RANKED_SOLO_5x5'
-				}`
-			);
+			// console.log(
+			// 	`${rankedData.body[index].summonerName} ${
+			// 		rankedData.body[index].queueType === 'RANKED_SOLO_5x5'
+			// 	}`
+			// );
 			if (rankedData.body[index].queueType === 'RANKED_SOLO_5x5') {
 				data = rankedData.body[index];
 			}
 		}
 		Object.assign(data, playerData.body);
-		console.log(data);
+		//console.log(data);
 		if (data.name) {
 			data['summonerName'] = data.name;
 			if (!data.rank) {
-				data['rank'] = 'NA';
+				data['playerRank'] = 'NA';
 				data['tier'] = 'NA';
+				data['queueType'] = 'NA';
+				data['leaguePoints'] = 0;
+				data['summonerId'] = data.id;
+			} else {
+				data['playerRank'] = data.rank;
+				delete data.rank;
 			}
 			delete data.name;
+			delete data.id;
 		}
 		if (data.summonerId) {
 			data['encriptedId'] = data.summonerId;

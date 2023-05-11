@@ -13,11 +13,17 @@ const db = mysql.createConnection({
 });
 
 router.post('/POST', async (req, res) => {
-	const eid = req.body.eid;
+	const eid = req.body.encriptedId;
 	const summonerName = req.body.summonerName;
 	const summonerLevel = req.body.summonerLevel;
+	const queueType = req.body.queueType;
+	const leaguePoints = req.body.leaguePoints;
+	const wins = req.body.wins;
+	const losses = req.body.losses;
+	const tier = req.body.tier;
+	const rank = req.body.playerRank;
 	const postQuery =
-		'INSERT INTO summoners (eid, summonerName, summonerLevel) VALUES (?,?,?)';
+		'INSERT INTO summoners (eid, summonerName, summonerLevel, queueType, leaguePoints, wins, losses, tier, playerRank) VALUES (?,?,?,?,?,?,?,?,?)';
 	db.query('SELECT * FROM summoners WHERE eid =?', [eid], (err, result) => {
 		if (err) {
 			res.status(500).send('ERROr checking for existing user').end();
@@ -27,14 +33,29 @@ router.post('/POST', async (req, res) => {
 			res.status(400).send('ERROR: Already exists').end();
 			return;
 		}
-
-		db.query(postQuery, [eid, summonerName, summonerLevel], (err, result) => {
-			if (err) {
-				res.status(500).send('Error inserting user').end();
-				return;
+		console.log('adding user');
+		db.query(
+			postQuery,
+			[
+				eid,
+				summonerName,
+				summonerLevel,
+				queueType,
+				leaguePoints,
+				wins,
+				losses,
+				tier,
+				rank,
+			],
+			(err, result) => {
+				if (err) {
+					console.log(err);
+					res.status(500).send('Error inserting user').end();
+					return;
+				}
+				res.status(200).send('User added').end();
 			}
-			res.status(200).send('User added').end();
-		});
+		);
 	});
 });
 router.get('/GET', async (req, res) => {
