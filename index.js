@@ -19,5 +19,5 @@ app.set('trust proxy, 1');
 //Enable cors
 app.use(cors());
 app.use('/summoner', require('./routes/riot'));
-app.use('/user', require('./routes/db'));
+app.use('/user', require('./routes/firebaseRDB'));
 app.listen(PORT, () => console.log(`workin on ${PORT}`));
