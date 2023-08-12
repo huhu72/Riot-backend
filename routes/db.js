@@ -22,8 +22,7 @@ router.post('/POST', async (req, res) => {
 	const losses = req.body.losses;
 	const tier = req.body.tier;
 	const rank = req.body.playerRank;
-	const postQuery =
-		'INSERT INTO summoners (eid, summonerName, summonerLevel, queueType, leaguePoints, wins, losses, tier, playerRank) VALUES (?,?,?,?,?,?,?,?,?)';
+	const postQuery = 'INSERT INTO summoners (eid, summonerName, summonerLevel, queueType, leaguePoints, wins, losses, tier, playerRank) VALUES (?,?,?,?,?,?,?,?,?)';
 	db.query('SELECT * FROM summoners WHERE eid =?', [eid], (err, result) => {
 		if (err) {
 			res.status(500).send('ERROr checking for existing user').end();
@@ -34,28 +33,14 @@ router.post('/POST', async (req, res) => {
 			return;
 		}
 		console.log('adding user');
-		db.query(
-			postQuery,
-			[
-				eid,
-				summonerName,
-				summonerLevel,
-				queueType,
-				leaguePoints,
-				wins,
-				losses,
-				tier,
-				rank,
-			],
-			(err, result) => {
-				if (err) {
-					console.log(err);
-					res.status(500).send('Error inserting user').end();
-					return;
-				}
-				res.status(200).send('User added').end();
+		db.query(postQuery, [eid, summonerName, summonerLevel, queueType, leaguePoints, wins, losses, tier, rank], (err, result) => {
+			if (err) {
+				console.log(err);
+				res.status(500).send('Error inserting user').end();
+				return;
 			}
-		);
+			res.status(200).send('User added').end();
+		});
 	});
 });
 router.get('/GET', async (req, res) => {
@@ -77,8 +62,7 @@ router.put('/put', async (req, res) => {
 	const eid = req.body.eid;
 	const summonerName = req.body.summonerName;
 	const summonerLevel = req.body.summonerLevel;
-	const putQuery =
-		'UPDATE summoners SET summonerName = ?, summonerLevel = ? WHERE eid = ?';
+	const putQuery = 'UPDATE summoners SET summonerName = ?, summonerLevel = ? WHERE eid = ?';
 	db.query('SELECT * FROM summoners WHERE eid =?', [eid], (err, result) => {
 		if (err) {
 			res.status(500).send('ERROR checking for existing user').end();

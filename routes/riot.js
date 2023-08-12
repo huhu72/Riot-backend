@@ -12,14 +12,11 @@ const API_RANKED_URL = '/lol/league/v4/entries/by-summoner/';
 const params = new URLSearchParams({
 	api_key: API_KEY,
 });
-
+//Dont think this is even being used
 router.get('/', async (req, res) => {
 	try {
-		const requestData = url.parse(req.url, true).query.summoner;
-		const apiRes = await needle(
-			'get',
-			`${API_BASE_URL}${API_SUMMONER_URL}${requestData}?${params}`
-		);
+		const summonerName = url.parse(req.url, true).query.summoner;
+		const apiRes = await needle('get', `${API_BASE_URL}${API_SUMMONER_URL}${summonerName}?${params}`);
 		const data = apiRes.body;
 		res.status(200).json(data);
 	} catch (error) {
@@ -27,8 +24,9 @@ router.get('/', async (req, res) => {
 	}
 });
 router.get('/ranked', async (req, res) => {
-	this.summonerData = {};
-	this.summonerId = '';
+	//Dont think the variables below are used
+	// this.summonerData = {};
+	// this.summonerId = '';
 	const data = await getPlayerData(url.parse(req.url, true).query.summoner);
 	try {
 		res.status(200).json(data);
@@ -38,14 +36,8 @@ router.get('/ranked', async (req, res) => {
 });
 async function getPlayerData(playerName) {
 	try {
-		const playerData = await needle(
-			'get',
-			`${API_BASE_URL}${API_SUMMONER_URL}${playerName}?${params}`
-		);
-		const rankedData = await needle(
-			'get',
-			`${API_BASE_URL}${API_RANKED_URL}${playerData.body.id}?${params}`
-		);
+		const playerData = await needle('get', `${API_BASE_URL}${API_SUMMONER_URL}${playerName}?${params}`);
+		const rankedData = await needle('get', `${API_BASE_URL}${API_RANKED_URL}${playerData.body.id}?${params}`);
 		// console.log(
 		// 	`${API_BASE_URL}${API_RANKED_URL}${playerData.body.id}?${params}`
 		// );

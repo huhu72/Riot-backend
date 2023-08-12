@@ -21,3 +21,24 @@ app.use(cors());
 app.use('/summoner', require('./routes/riot'));
 app.use('/user', require('./routes/firebaseRDB'));
 app.listen(PORT, () => console.log(`workin on ${PORT}`));
+
+// const firebase = require('firebase-admin');
+// var db = firebase.database();
+// const ref = db.ref('Users/Curls for Jesus');
+
+// ref.on(
+// 	'value',
+// 	(snapshot) => {
+// 		if (snapshot.val() === null) {
+// 			console.log('no snapshot');
+// 		}
+// 		const playerData = {};
+// 		Object.assign(playerData, snapshot.val());
+// 		playerData.summonerName = 'test';
+
+// 		console.log(playerData);
+// 	},
+// 	(errorObject) => {
+// 		console.log(errorObject.name);
+// 	}
+// );
