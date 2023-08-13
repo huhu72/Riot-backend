@@ -29,30 +29,78 @@ router.post('/POST', async (req, res) => {
 		}
 	});
 });
+
 router.get('/GET', async (req, res) => {
+	try {
+		const data = await getPlayersDataFromDB();
+		if (data === null) {
+			res.sendStatus(204);
+		} else {
+			res.status(200).json(data);
+		}
+	} catch (error) {
+		console.error(error);
+		res.status(500).send('An error occurred');
+	}
+});
+async function getPlayersDataFromDB() {
+	return new Promise((resolve, reject) => {
+		ref.on(
+			'value',
+			(snapshot) => {
+				if (snapshot.val() === null) {
+					console.log('Database is not yet populated');
+					resolve(null);
+				} else {
+					const data = Object.keys(snapshot.val()).map((value) => {
+						const summonerInfo = snapshot.val()[value];
+						summonerInfo['summonerName'] = value;
+						return summonerInfo;
+					});
+					resolve(data);
+				}
+			},
+			(errorObject) => {
+				reject(errorObject);
+			}
+		);
+	});
+}
+router.get('/GETUSER', async (req, res) => {
 	const summonerName = url.parse(req.url, true).query.summoner;
-	const data = await getPlayerDataFromDB(summonerName);
-	if (data === null) {
-		res.sendStatus(204);
-	} else {
-		res.status(200).json(data);
+	try {
+		const data = await getPlayerDataFromDB(summonerName);
+		if (data === null) {
+			res.sendStatus(204);
+		} else {
+			res.status(200).json(data);
+		}
+	} catch (error) {
+		console.error(error);
+		res.status(500).send('An error occurred');
 	}
 });
 
-async function getPlayerDataFromDB(summonerName) {
-	const userRef = ref.child(`/${summonerName}`);
-	userRef.on(
-		'value',
-		(snapshot) => {
-			if (snapshot.val() === null) {
-				console.log(summonerName + ' does not exist');
-				return null;
-			} else {
-				return snapshot.val();
+function getPlayerDataFromDB(summonerName) {
+	return new Promise((resolve, reject) => {
+		const userRef = ref.child(`/${summonerName}`);
+		userRef.on(
+			'value',
+			(snapshot) => {
+				if (snapshot.val() === null) {
+					console.log(summonerName + ' does not exist');
+					resolve(null);
+				} else {
+					const data = snapshot.val();
+					data['summonerName'] = summonerName;
+					resolve(data);
+				}
+			},
+			(errorObject) => {
+				reject(errorObject);
 			}
-		},
-		(errorObject) => {}
-	);
+		);
+	});
 }
 
 module.exports = router;
