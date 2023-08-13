@@ -24,7 +24,7 @@ app.listen(PORT, () => console.log(`workin on ${PORT}`));
 
 // const firebase = require('firebase-admin');
 // var db = firebase.database();
-// const ref = db.ref('Users/Curls for Jesus');
+// const ref = db.ref('Users/');
 
 // ref.on(
 // 	'value',
@@ -32,11 +32,14 @@ app.listen(PORT, () => console.log(`workin on ${PORT}`));
 // 		if (snapshot.val() === null) {
 // 			console.log('no snapshot');
 // 		}
-// 		const playerData = {};
-// 		Object.assign(playerData, snapshot.val());
-// 		playerData.summonerName = 'test';
 
-// 		console.log(playerData);
+// 		var data = [];
+// 		Object.keys(snapshot.val()).forEach(function (value, key) {
+// 			var summonerInfo = snapshot.val()[value];
+// 			summonerInfo['summonerName'] = value;
+// 			data.push(summonerInfo);
+// 		});
+// 		console.log(data[0]);
 // 	},
 // 	(errorObject) => {
 // 		console.log(errorObject.name);
